@@ -1,4 +1,5 @@
 const express = require('express')
+const fetch = require('node-fetch') // fetch doesn't work on node. Only on browsers
 
 const router = express.Router()
 
@@ -6,57 +7,37 @@ router.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-router.get('/data', (req, res) => {
-  res.json(data)
-  //https://hear-me-out-956f8.firebaseio.com/boards.json
+/*
+   Browser --REQ--> Server --REQ--> Database
+   Database --RES--> Server --RES--> Browser
+*/
+
+router.get('/boards/default', (req, res) => {
+  fetch('https://hear-me-out-956f8.firebaseio.com/temp.json')
+    .then(fetchRes => fetchRes.json())
+    .then(jsdata => res.json(jsdata))
+})
+
+router.get('/users', (req, res) => {
+  fetch('https://hear-me-out-956f8.firebaseio.com/users.json')
+    .then(result => result.json())
+    .then(data => res.json(data))
+})
+
+router.post('/boards', (req, res) => {
+  const newBoard = req.body
+  fetch('https://hear-me-out-956f8.firebaseio.com/boards.json', {
+    method: 'post',
+    body: JSON.stringify({
+        name: newBoard.boardName
+    })
+  })
+    .then(result => result.json())
+    .then(data => res.json({type: 'success', data: data}))
+    .catch(err => {
+      console.log(err)
+      res.json({type: 'error', message: err})
+    })
 })
 
 module.exports = router
-
-const data = [
-  {
-    msg: 'Small Talk',
-    img: '/images/small-talk/small-talk.png',
-    buttons: [
-      {
-        msg: 'Hello',
-        type: 'category-item'
-      },
-      {
-        msg: 'Goodbye',
-        type: 'category-item'
-      }
-    ],
-    type: 'category'
-  },
-  {
-    msg: 'Question',
-    img: '/images/question/question.png',
-    type: 'category'
-  },
-  {
-    msg: 'Food',
-    img: '/images/food/food.png',
-    type: 'category'
-  },
-  {
-    msg: 'Pain',
-    img: '/images/pain/pain.png',
-    type: 'category'
-  },
-  {
-    msg: 'Need',
-    img: '/images/need/need.png',
-    type: 'category'
-  },
-  {
-    msg: 'Place',
-    img: '/images/place/place.png',
-    type: 'category'
-  },
-  {
-    msg: 'Person',
-    img: '/images/person/person.png',
-    type: 'category'
-  }
-]

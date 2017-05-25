@@ -26,10 +26,18 @@ router.get('/users', (req, res) => {
 
 router.post('/boards', (req, res) => {
   const newBoard = req.body
+
   fetch('https://hear-me-out-956f8.firebaseio.com/boards.json', {
     method: 'post',
     body: JSON.stringify({
-        name: newBoard.boardName
+        name: newBoard.boardName,
+        buttons: [
+          {
+            word: newBoard.buttons[0].word,
+            imgUrl: newBoard.buttons[0].imgUrl,
+            type: 'category'
+          }
+        ]
     })
   })
     .then(result => result.json())

@@ -48,6 +48,20 @@ router.get('/boards', (req, res) => {
     .then(data => res.json(customisedArray(data)))
 })
 
+router.post('/upload', (req, res) => {
+console.log(req.body.fileName, req.body.data)
+  fetch('https://api.cloudinary.com/v1_1/hearmeout/image/upload', {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      file: req.body.data,
+      upload_preset: 'uploads'
+    })
+  })
+    .then(result => result.json())
+    .then(data => res.json(data.url))
+})
+
 function customisedArray (data) {
   const resultArr = []
   for (let key in data) {

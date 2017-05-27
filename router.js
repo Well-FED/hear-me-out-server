@@ -12,10 +12,11 @@ router.get('/', (req, res) => {
    Database --RES--> Server --RES--> Browser
 */
 
-router.get('/boards/default', (req, res) => {
-  fetch('https://hear-me-out-956f8.firebaseio.com/temp.json')
+router.get('/boards/:id', (req, res) => {
+  const id = req.params.id
+  fetch(`https://hear-me-out-956f8.firebaseio.com/boards/${id}.json`)
     .then(fetchRes => fetchRes.json())
-    .then(jsdata => res.json(jsdata))
+    .then(jsdata => res.json(jsdata.buttons))
 })
 
 router.get('/users', (req, res) => {
@@ -26,18 +27,11 @@ router.get('/users', (req, res) => {
 
 router.post('/boards', (req, res) => {
   const newBoard = req.body
-
   fetch('https://hear-me-out-956f8.firebaseio.com/boards.json', {
     method: 'post',
     body: JSON.stringify({
         name: newBoard.boardName,
-        buttons: [
-          {
-            word: newBoard.buttons[0].word,
-            imgUrl: newBoard.buttons[0].imgUrl,
-            type: 'category'
-          }
-        ]
+        buttons: newBoard.buttons
     })
   })
     .then(result => result.json())
@@ -47,5 +41,22 @@ router.post('/boards', (req, res) => {
       res.json({type: 'error', message: err})
     })
 })
+
+router.get('/boards', (req, res) => {
+  fetch('https://hear-me-out-956f8.firebaseio.com/boards.json')
+    .then(result => result.json())
+    .then(data => res.json(customisedArray(data)))
+})
+
+function customisedArray (data) {
+  const resultArr = []
+  for (let key in data) {
+    resultArr.push({id: key, name: data[key].name})
+  }
+  return resultArr
+}
+
+
+
 
 module.exports = router

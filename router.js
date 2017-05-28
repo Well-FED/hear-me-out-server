@@ -3,10 +3,6 @@ const fetch = require('node-fetch') // fetch doesn't work on node. Only on brows
 
 const router = express.Router()
 
-router.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
 /*
    Browser --REQ--> Server --REQ--> Database
    Database --RES--> Server --RES--> Browser

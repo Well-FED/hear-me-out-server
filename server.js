@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 
 // Use * for all urls
 // Use before routes
-app.use(cors({origin: 'http://localhost:3000'})) // Secure
+app.use(cors({origin: '*'})) // Secure
 
 app.use('/', routes)
 

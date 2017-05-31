@@ -45,7 +45,6 @@ router.get('/boards', (req, res) => {
 })
 
 router.post('/upload', (req, res) => {
-console.log(req.body.fileName, req.body.data)
   fetch('https://api.cloudinary.com/v1_1/hearmeout/image/upload', {
     method: 'post',
     headers: { 'Content-Type': 'application/json' },

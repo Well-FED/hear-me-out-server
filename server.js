@@ -5,7 +5,7 @@ const cors = require('cors')
 const routes = require('./router')
 
 const app = express()
-app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.json({limit: '3mb'})); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 // Use * for all urls

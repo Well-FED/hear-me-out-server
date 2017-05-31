@@ -54,7 +54,7 @@ router.post('/upload', (req, res) => {
     })
   })
     .then(result => result.json())
-    .then(data => res.json(data.url))
+    .then(data => res.json(data.secure_url))
 })
 
 function customisedArray (data) {
